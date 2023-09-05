@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= name %> / hadaf</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+      .goalbody {
+        top: 50%;
+        right: unset;
+        left: 50%;
+        bottom: unset;
+        position: absolute;
+        transform: translateX(-50%) translateY(-50%) scale(5);
+        color: white;
+      }
+      .goalbody .inner {
+        transition: opacity 0.3s;
+        text-align: center;
+        min-width: 300px;
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.7);
+      }
+      .goalbody .goalprog {
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 11px;
+        border: 1px solid rgba(255, 255, 255, 0.39);
+        direction: rtl;
+        font-weight: 400;
+      }
+      .goalbody .progr {
+        max-width: 100%;
+        width: 0%;
+        background-color: rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
+        font-size: 15px;
+        border-radius: 10px;
+        min-width: 30px;
+      }
+    </style>
+  </head>
+  <body onresize="Resize()">
+    <div class="goalbody" id="goalbody">
+      <div class="inner">
+        <div class="goaltitle"><%= title %></div>
+        <div class="goalprog">
+          <div class="progr" style="width: <%= progbar %>%">
+            <%= progbar %>%
+          </div>
+        </div>
+        <div class="goaldesc"><%= minmoney %>/<%= maxmoney %></div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      function Resize() {
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var scaleValue = Math.min(
+          screenWidth / (document.getElementById("goalbody").clientWidth + 50),
+          screenHeight / document.getElementById("goalbody").clientHeight
+        );
+        var transformValue =
+          "translateX(-50%) translateY(-50%) scale(" + scaleValue + ")";
+        document.getElementById("goalbody").style.transform = transformValue;
+      }
+      Resize();
+
+      var socket = io();
+      socket.on("connect", function () {});
+      socket.on("new-message", addMessage);
+      function addMessage() {
+        alert(false);
+      }
+    </script>
+  </body>
+</html>

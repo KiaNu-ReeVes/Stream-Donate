@@ -7,30 +7,18 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-import mysql from "mysql2";
-const dbConfig = {
-  host: process.env.MYSQL_HOST || "localhost",
-  port: parseInt(process.env.MYSQL_PORT || "3306"),
-  user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || "",
-  database: process.env.MYSQL_DATABASE || "mydb",
-};
-
-const connection = mysql.createConnection(dbConfig);
-
-connection.connect((err) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log("Database Connected");
-  }
-});
+import connection from "./router/mysql";
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-const app = express();
 const port = parseInt(process.env.PORT || 3000);
+
+const app = express();
+import http from "http";
+const server = http.createServer(app);
+import { Server } from "socket.io";
+const io = new Server(server);
 
 export default class Application {
   constructor() {
@@ -38,11 +26,50 @@ export default class Application {
   }
 
   private websiteConfig(): void {
-    app.get("/", (req, res) => {
-      res.send("Express + TypeScript Server");
+    app.use(express.static(__dirname + "/public"));
+    app.set("view engine", "ejs");
+    app.set("views", path.join(__dirname, "views"));
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.set("trust proxy", 1);
+    app.use(cookieParser("87H49CBh0E"));
+    app.use(
+      session({
+        secret: "abcdefg",
+        resave: true,
+        saveUninitialized: false,
+      })
+    );
+    var sio = {};
+    const hadaf = {
+      ["KiaN"]: {
+        name: "سلام",
+        now: 582987,
+        goal: 1000000,
+      },
+    };
+
+    app.get("/overlay/:user/hadaf", (req, res) => {
+      const goalconfig = hadaf[req.params.user];
+      console.log(goalconfig);
+      console.log(io.sockets.emit());
+      res.render("overlays/hadaf", {
+        name: process.env.PN,
+        title: goalconfig.name,
+        progbar: parseInt((goalconfig.now / goalconfig.goal) * 100),
+        minmoney: goalconfig.now,
+        maxmoney: goalconfig.goal,
+      });
     });
 
-    app.listen(port, () => {
+    io.on("connection", (socket) => {
+      console.log("A user connected " + socket.id);
+      socket.on("disconnect", () => {
+        console.log("User disconnected");
+      });
+    });
+
+    server.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);
     });
   }
