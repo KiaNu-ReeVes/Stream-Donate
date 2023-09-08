@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> / Donate</title>
+</head>
+<body>
+    <form action="/donate/<%= streamer %>" method="post">
+        <input type="text" name="donator" id="donator">
+        <input type="text" name="descs" id="descs">
+        <input type="number" name="money" id="money">
+        <button type="submit">DONE</button>
+    </form>
+</body>
+</html>

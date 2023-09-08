@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <title><%= name %> | Dashboard</title>
+  </head>
+  <body dir="rtl">
+    <div class="container-fluid">
+      <div class="base row">
+        <!-- سایدبار -->
+        <%- include("../include/sidebars") %>
+        <!-- محتوا -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <header>
+            <nav class="navbar navbar-expand-lg bg-transparent">
+              <div class="container-fluid">
+                <button class="softbtn" id="themebtn">
+                  <i class="fa-solid fa-sun"></i>
+                </button>
+                <div class="navbar">
+                  <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="user">
+                      <img src="/assets/img/user.webp" alt="User">
+                      <div class="info">
+                        <p class="username">KiaN</p>
+                        <span class="userlink">localhost / KiaN</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+          <main class="container-fluid">
+            <div class="head">داشبورد</div>
+            <div class="row pt-5">
+              <div class="col-12 col-xl-7 float-left">
+                <div class="subsc">
+                  <div class="proimg">
+                    <img src="/assets/img/coin.webp" alt="">
+                  </div>
+                  <div class="info">
+                    <p>زمان باقی مانده از اشتراک شما</p>
+                    <div class="prog">
+                      <span>27روز</span>
+                      <div class="prog1">
+                        <div class="prog2" style="width: 90%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-5 float-left" style="background-color: aliceblue;">
+                <!-- محتوای دیگر این کلون در اینجا قرار می‌گیرد -->
+              ss
+              </div>
+            </div>
+          </main>          
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.getElementById("themebtn").addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+          document.documentElement.setAttribute("data-bs-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", "dark");
+        }
+      });
+    </script>
+  </body>
+</html>

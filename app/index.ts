@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-import connection from "./router/mysql";
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
@@ -19,6 +18,7 @@ import http from "http";
 const server = http.createServer(app);
 import { Server } from "socket.io";
 const io = new Server(server);
+import connection from "./router/mysql";
 
 export default class Application {
   constructor() {
@@ -41,24 +41,35 @@ export default class Application {
       })
     );
     var sio = {};
-    const hadaf = {
-      ["KiaN"]: {
-        name: "سلام",
-        now: 582987,
-        goal: 1000000,
-      },
-    };
+    app.use("/auth", require("./router/auth"))
+
+    app.get("/dashboard", (req, res) => {
+      return res.render("./dashboard/index", {
+        name: process.env.PN
+      })
+    });
 
     app.get("/overlay/:user/hadaf", (req, res) => {
-      const goalconfig = hadaf[req.params.user];
-      console.log(goalconfig);
-      console.log(io.sockets.emit());
-      res.render("overlays/hadaf", {
-        name: process.env.PN,
-        title: goalconfig.name,
-        progbar: parseInt((goalconfig.now / goalconfig.goal) * 100),
-        minmoney: goalconfig.now,
-        maxmoney: goalconfig.goal,
+      connection.query("SELECT * FROM goal", function (err, ress) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        // تبدیل نتیجه به شکل مورد نیاز
+        ress.forEach((row) => {
+          if (row.streamer == req.params.user) {
+            const goalconfig = row;
+            return res.render("overlays/hadaf", {
+              name: process.env.PN,
+              title: goalconfig.title,
+              progbar: parseInt(
+                (goalconfig.nowmoney / goalconfig.maxmoney) * 100
+              ),
+              minmoney: goalconfig.nowmoney,
+              maxmoney: goalconfig.maxmoney,
+            });
+          }
+        });
       });
     });
 
@@ -66,6 +77,41 @@ export default class Application {
       console.log("A user connected " + socket.id);
       socket.on("disconnect", () => {
         console.log("User disconnected");
+      });
+    });
+
+    app.get("/donate/:name", (req, res) => {
+      const name = req.params.name
+      return res.render("donate", {
+        name: process.env.PN,
+        streamer: name,
+      });
+    });
+
+    app.post("/donate/:streamer", (req, res) => {
+      const streamer = req.params.streamer
+      connection.query("SELECT * FROM goal", function (err, ress) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        // تبدیل نتیجه به شکل مورد نیاز
+        ress.forEach((row) => {
+          if (row.streamer == streamer) {
+            const goalconfig = row;
+            const money = parseInt(req.body.money);
+            connection.query(`INSERT INTO donates (streamer, donator, price, descs) VALUES (?,?,?,?)`, [streamer, req.body.donator, money, req.body.descs], function(err) {
+              console.log(err)
+            });
+            connection.query(
+              `UPDATE goal SET nowmoney = '${
+                money + parseInt(goalconfig.nowmoney)
+              }' WHERE streamer = '${streamer}'`
+            );
+            io.sockets.emit("new-donate-KiaN", money);
+            return res.send("<h1>Done</h1>");
+          }
+        });
       });
     });
 

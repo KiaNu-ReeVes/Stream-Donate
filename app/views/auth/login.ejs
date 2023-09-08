@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/auth.css" />
+    <title><%= name %> | Login</title>
+  </head>
+  <body dir="rtl">
+    <div class="base">
+        <div class="container-fluid">
+            <div class="logo text-center">
+                <img src="/assets/img/untitled-1_iyfa.png" alt="logo" style="width: 30%;">
+            </div>
+            <form class="row loginform" dir="ltr">
+                <input type="email" name="email" id="email" class="col-12 mt-5 mb-3" placeholder="Email" required>
+                <input type="password" name="password" id="password" class="col-12 mb-3" placeholder="Password" required>
+                <input type="checkbox" name="rememberme" id="rememberme" checked>
+                <label for="rememberme">Remember Me</label>
+                <button type="reset" class="col-6 mt-3">Reset</button>
+                <button type="submit" class="col-6 mt-3">Done</button>
+            </form>
+        </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

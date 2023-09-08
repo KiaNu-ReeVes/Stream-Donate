@@ -34,6 +34,7 @@
         font-weight: 400;
       }
       .goalbody .progr {
+        transition: width ease 2s;
         max-width: 100%;
         width: 0%;
         background-color: rgb(255, 255, 255);
@@ -47,16 +48,17 @@
   <body onresize="Resize()">
     <div class="goalbody" id="goalbody">
       <div class="inner">
-        <div class="goaltitle"><%= title %></div>
+        <div class="goaltitle">Not Loaded</div>
         <div class="goalprog">
-          <div class="progr" style="width: <%= progbar %>%">
-            <%= progbar %>%
+          <div class="progr">
+            0%
           </div>
         </div>
-        <div class="goaldesc"><%= minmoney %>/<%= maxmoney %></div>
+        <div class="goaldesc">0 / 0</div>
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script>
       function Resize() {
         var screenWidth = window.innerWidth;
@@ -69,13 +71,26 @@
           "translateX(-50%) translateY(-50%) scale(" + scaleValue + ")";
         document.getElementById("goalbody").style.transform = transformValue;
       }
-      Resize();
+      var title = "<%= title %>";
+      var progbar = "<%= progbar %>";
+      var minmoney = "<%= minmoney %>";
+      var maxmoney = "<%= maxmoney %>";
+      (function setup() {
+        Resize();
+        console.log({title, progbar, minmoney, maxmoney})
+        $(".goaltitle").text(title);
+        $(".progr").css("width", `${progbar}%`).text(progbar + "%");
+        $(".goaldesc").text(`${maxmoney} / ${minmoney}`);
+      })();
 
       var socket = io();
       socket.on("connect", function () {});
-      socket.on("new-message", addMessage);
-      function addMessage() {
-        alert(false);
+      socket.on("new-donate-KiaN", newdonate);
+      function newdonate(money) {
+        minmoney = parseInt(minmoney) + parseInt(money);
+        progbar = parseInt((minmoney / maxmoney) * 100);
+        $(".progr").css("width", `${progbar}%`).text(progbar + "%");
+        $(".goaldesc").text(`${maxmoney} / ${minmoney}`);
       }
     </script>
   </body>
