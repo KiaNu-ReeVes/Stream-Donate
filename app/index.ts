@@ -41,12 +41,32 @@ export default class Application {
       })
     );
     var sio = {};
-    app.use("/auth", require("./router/auth"))
+    app.use("/auth", require("./router/auth"));
 
     app.get("/dashboard", (req, res) => {
-      return res.render("./dashboard/index", {
-        name: process.env.PN
-      })
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          return res.render("./dashboard/index", {
+            name: process.env.PN,
+            userInfo: ress[0],
+          });
+        }
+      );
+    });
+
+    app.get("/dashboard/tools", (req, res) => {
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          return res.render("./dashboard/tools", {
+            name: process.env.PN,
+            userInfo: ress[0],
+          });
+        }
+      );
     });
 
     app.get("/overlay/:user/hadaf", (req, res) => {
@@ -80,16 +100,23 @@ export default class Application {
       });
     });
 
-    app.get("/donate/:name", (req, res) => {
-      const name = req.params.name
-      return res.render("donate", {
-        name: process.env.PN,
-        streamer: name,
-      });
+    app.get("/:link", (req, res) => {
+      const link = req.params.link;
+      connection.query(
+        "SELECT * FROM users WHERE link = ?",
+        [link],
+        function (err, ress) {
+          if (!ress[0]) return res.redirect("/");
+          return res.render("donate", {
+            name: process.env.PN,
+            streamer: ress[0].username,
+          });
+        }
+      );
     });
 
     app.post("/donate/:streamer", (req, res) => {
-      const streamer = req.params.streamer
+      const streamer = req.params.streamer;
       connection.query("SELECT * FROM goal", function (err, ress) {
         if (err) {
           console.error(err);
@@ -100,9 +127,13 @@ export default class Application {
           if (row.streamer == streamer) {
             const goalconfig = row;
             const money = parseInt(req.body.money);
-            connection.query(`INSERT INTO donates (streamer, donator, price, descs) VALUES (?,?,?,?)`, [streamer, req.body.donator, money, req.body.descs], function(err) {
-              console.log(err)
-            });
+            connection.query(
+              `INSERT INTO donates (streamer, donator, price, descs) VALUES (?,?,?,?)`,
+              [streamer, req.body.donator, money, req.body.descs],
+              function (err) {
+                console.log(err);
+              }
+            );
             connection.query(
               `UPDATE goal SET nowmoney = '${
                 money + parseInt(goalconfig.nowmoney)

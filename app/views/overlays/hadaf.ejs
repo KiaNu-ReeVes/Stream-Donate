@@ -50,15 +50,13 @@
       <div class="inner">
         <div class="goaltitle">Not Loaded</div>
         <div class="goalprog">
-          <div class="progr">
-            0%
-          </div>
+          <div class="progr">0%</div>
         </div>
         <div class="goaldesc">0 / 0</div>
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
     <script>
       function Resize() {
         var screenWidth = window.innerWidth;
@@ -77,9 +75,11 @@
       var maxmoney = "<%= maxmoney %>";
       (function setup() {
         Resize();
-        console.log({title, progbar, minmoney, maxmoney})
+        console.log({ title, progbar, minmoney, maxmoney });
         $(".goaltitle").text(title);
-        $(".progr").css("width", `${progbar}%`).text(progbar + "%");
+        $(".progr")
+          .css("width", `${progbar}%`)
+          .text(progbar + "%");
         $(".goaldesc").text(`${maxmoney} / ${minmoney}`);
       })();
 
@@ -89,7 +89,9 @@
       function newdonate(money) {
         minmoney = parseInt(minmoney) + parseInt(money);
         progbar = parseInt((minmoney / maxmoney) * 100);
-        $(".progr").css("width", `${progbar}%`).text(progbar + "%");
+        $(".progr")
+          .css("width", `${progbar}%`)
+          .text(progbar + "%");
         $(".goaldesc").text(`${maxmoney} / ${minmoney}`);
       }
     </script>

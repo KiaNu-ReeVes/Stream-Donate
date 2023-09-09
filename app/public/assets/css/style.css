@@ -1,87 +1,101 @@
 @font-face {
-    font-family: "Rubik";
-    src: url('/assets/Rubik-VariableFont_wght.ttf');
-    font-weight: normal;
+  font-family: "Rubik";
+  src: url("/assets/Rubik-VariableFont_wght.ttf");
+  font-weight: normal;
 }
 
 body {
-    font-family: "Rubik" !important;
-    background: rgb(234,234,255);
-    background: linear-gradient(45deg, rgba(234,234,255,1) 0%, rgba(225,225,255,1) 100%);
+  font-family: "Rubik" !important;
+  background: rgb(234, 234, 255);
+  background: linear-gradient(
+    45deg,
+    rgba(234, 234, 255, 1) 0%,
+    rgba(225, 225, 255, 1) 100%
+  );
 }
 
-html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 #sidebar {
-    height: 100%;
-    overflow-y: auto;
+  height: 100%;
+  overflow-y: auto;
 }
 
 #sidebar::-webkit-scrollbar {
-    width: 10px;
-    direction: ltr;
+  width: 10px;
+  direction: ltr;
 }
 
 #sidebar::-webkit-scrollbar-thumb {
-    background: #c1c5df;
-    border-radius: 20px;
+  background: #c1c5df;
+  border-radius: 20px;
 }
 
 #sidebar::-webkit-scrollbar-thumb:hover {
-    background: #686c86;
+  background: #686c86;
 }
-
 
 .base {
-    background: rgb(244,244,252);
-    background: linear-gradient(45deg, rgba(244,244,252,1) 0%, rgba(225,225,255,1) 100%);
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    margin: auto;
-    width: 70%;
-    height: 90%;
-    border-radius: 20px;
-    border: 1px white solid;
-    padding: 20px;
+  background: rgb(244, 244, 252);
+  background: linear-gradient(
+    45deg,
+    rgba(244, 244, 252, 1) 0%,
+    rgba(225, 225, 255, 1) 100%
+  );
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  width: 70%;
+  height: 90%;
+  border-radius: 20px;
+  border: 1px white solid;
+  padding: 20px;
 }
 @media screen and (max-width: 1200px) {
-    .base {
-        width: 100%;
-        height: 100%;
-    }
+  .base {
+    width: 100%;
+    height: 100%;
   }
+}
 .navbar {
-    align-items: start !important;
+  align-items: start !important;
 }
 
 .navheader img {
-    width: 70%;
+  width: 70%;
 }
 
 .nav-itemcss {
-    font-family: "Rubik";
-    width: 100%;
-    border-radius: 30px;
-    padding: 5px 10px;
-    margin-bottom: 10px;
+  font-family: "Rubik";
+  width: 100%;
+  border-radius: 30px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
 }
 .nav-itemcss:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .nav-itemcss.active {
-    background-color: aliceblue;
+  background: rgb(210, 240, 240);
+  background: linear-gradient(
+    90deg,
+    rgb(198, 255, 255) 0%,
+    rgba(240, 248, 255, 1) 100%
+  );
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
 }
 
 .nav-itemcss .nav-link {
-    color: black;
+  color: black;
 }
 .nav-itemcss:last-child .nav-link {
-    color: #ff3f3f;
+  color: #ff3f3f;
 }
 
 .user {
@@ -103,88 +117,123 @@ html, body {
 }
 
 .user .username {
-    font-weight: bold;
+  font-weight: bold;
   margin: 0; /* حذف حاشیه‌های پیشفرض پاراگراف */
 }
 
 .user .userlink {
-    color: #686c86;
-    font-size: small;
+  color: #686c86;
+  font-size: small;
   margin: 0; /* حذف حاشیه‌های پیشفرض پاراگراف */
 }
 
 .softbtn {
-    margin: 4px 5px;
-    transition: all 0.3s cubic-bezier(0.30, 0, 0, 1);
-    position: relative;
-    border-radius: 50%;
-    padding: 2px;
-    box-shadow: 4px 2px 16px rgba(193, 197, 223, 0.7), -4px -2px 16px #FFFFFF;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    width: 38px;
-    height: 38px;
-    background: transparent!important;
-    color: #686c86;
-    border: none;
+  margin: 4px 5px;
+  transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
+  position: relative;
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 4px 2px 16px rgba(193, 197, 223, 0.7), -4px -2px 16px #ffffff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  width: 38px;
+  height: 38px;
+  background: transparent !important;
+  color: #686c86;
+  border: none;
 }
 
 main {
-    margin-top: 40px;
-    background-color: white;
-    /* width: 100%; */
-    height: 82.5%;
-    border-radius: 30px;
+  margin-top: 40px;
+  background-color: white;
+  /* width: 100%; */
+  height: 82.5%;
+  border-radius: 30px;
 }
 main .head {
-    border-bottom: 1px #c1c5df57 solid;
-    font-size: x-large;
-    padding: 20px;
-    font-weight: bolder;
+  border-bottom: 1px #c1c5df57 solid;
+  font-size: x-large;
+  padding: 20px;
+  font-weight: bolder;
 }
 .subsc {
-    display: flex;
-    width: 90%;
-    left: 0;
-    right: 0;
-    margin: auto;
-    background-color: #F6F2FF;
-    height: 80px;
-    border-radius: 30px;
+  display: flex;
+  width: 90%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #f6f2ff;
+  height: 80px;
+  border-radius: 30px;
 }
 
 .subsc .proimg {
-    width: 200px;
+  width: 200px;
 }
 
 .subsc .proimg img {
-    position: absolute;
-    width: 150px;
-    margin-right: 25px;
-    margin-top: -35px;
+  position: absolute;
+  width: 150px;
+  margin-right: 25px;
+  margin-top: -35px;
 }
 
 .subsc .info {
-    margin-top: 5px;
+  margin-top: 5px;
+  width: 70%;
 }
 
 .subsc .info .prog {
-    display: flex;
-    width: 150%;
+  display: flex;
+  width: 90%;
 }
 .subsc .info .prog span {
-    padding: 0px 20px;
+  padding: 0px 20px;
 }
 .subsc .info .prog .prog1 {
-    direction: ltr;
-    width: 100%;
-    height: 20px;
-    border-radius: 30px;
-    background-color: rgb(255, 255, 255);
+  direction: ltr;
+  width: 100%;
+  height: 20px;
+  border-radius: 30px;
+  background-color: rgb(255, 255, 255);
 }
 .subsc .info .prog .prog2 {
-    border-radius: 30px;
-    height: 100%;
-    background: rgb(244,145,255);
-background: linear-gradient(145deg, rgba(244,145,255,1) 0%, rgba(238,82,255,1) 100%);
+  border-radius: 30px;
+  height: 100%;
+  background: rgb(244, 145, 255);
+  background: linear-gradient(
+    145deg,
+    rgba(244, 145, 255, 1) 0%,
+    rgba(238, 82, 255, 1) 100%
+  );
+}
+.toolscol-item {
+  width: 100%;
+  height: 100%;
+  background-color: #f6f2ff;
+  border-radius: 30px;
+  padding: 25px;
+  /* margin: 10px 10px; */
+  transition: transform ease 0.2s;
+}
+.toolscol-item:hover {
+  transform: scale(0.9);
+}
+.tools-item {
+  text-decoration: none; /* no underline */
+  color: #703fc4;
+}
+.tools-item .toolitem-title {
+  font-size: 14px;
+  margin: 0;
+  font-weight: bolder;
+}
+.tools-item .toolitem-desc {
+  font-size: 13px;
+  margin: 4px 0;
+}
+.tools-item .toolitem-go {
+  font-size: 13px;
+  padding: 10px 0 0;
+  font-weight: bolder;
 }

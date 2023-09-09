@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <title><%= name %> | Dashboard</title>
+  </head>
+  <body dir="rtl" onload="preload()">
+    <div class="preloader">
+      <div class="loader">
+        <div class="ground"></div>
+        <div class="jump"></div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="base row">
+        <!-- سایدبار -->
+        <%- include("../include/sidebars") %>
+        <!-- محتوا -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <header>
+            <nav class="navbar navbar-expand-lg bg-transparent">
+              <div class="container-fluid">
+                <button class="softbtn" id="themebtn">
+                  <i class="fa-solid fa-sun"></i>
+                </button>
+                <div class="navbar">
+                  <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="user">
+                      <img src="/assets/img/user.webp" alt="User" />
+                      <div class="info">
+                        <p class="username">
+                          <%= userInfo.username || "Not Loaded" %>
+                        </p>
+                        <span class="userlink"
+                          >localhost / <%= userInfo.link || "Not Loaded"
+                          %></span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+          <main class="container-fluid">
+            <div class="head">ابزارها</div>
+            <div class="row g-2 pt-5">
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/alert/" class="tools-item">
+                    <h2 class="toolitem-title">هشدار رویداد جدید</h2>
+                    <p class="toolitem-desc">
+                      نمایش هشدار برای رویداد های مختلف روی پخش زنده (حمایت
+                      جدید، دنبال کننده یا اشتراک جدید آپارات)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/goals/" class="tools-item">
+                    <h2 class="toolitem-title">هدف ها</h2>
+                    <p class="toolitem-desc">
+                      ابزار های هدف (هدف دونیت، ساب، فالو ...)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/queuedlist/" class="tools-item">
+                    <h2 class="toolitem-title">لیست نوبتی حمایت ها</h2>
+                    <p class="toolitem-desc">
+                      نمایش نوبتی آخرین حمایت های انجام شده به تفکیک مبلغ بصورت
+                      لیست
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/labels/" class="tools-item">
+                    <h2 class="toolitem-title">برچسب های استریم</h2>
+                    <p class="toolitem-desc">
+                      نمایش حمایت هایی که صاحب عنوانی هستند (بزرگترین، آخرین و
+                      ...)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/vlists/" class="tools-item">
+                    <h2 class="toolitem-title">لیست های عمودی</h2>
+                    <p class="toolitem-desc">
+                      نمایش آمار های مختلف بصورت لیست عمودی (حمایت ها، فالو، ساب
+                      و ...)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/hlists/" class="tools-item">
+                    <h2 class="toolitem-title">لیست های افقی</h2>
+                    <p class="toolitem-desc">
+                      نمایش آمار های مختلف بصورت لیست افقی (حمایت ها، فالو، ساب
+                      و ...)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/flists/" class="tools-item">
+                    <h2 class="toolitem-title">لیست های ثابت</h2>
+                    <p class="toolitem-desc">
+                      نمایش آمار های مختلف بصورت لیست ثابت (حمایت ها، فالو، ساب
+                      و ...)
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="toolscol-item">
+                  <a href="/dashboard/tools/timers/" class="tools-item">
+                    <h2 class="toolitem-title">تایمر و زمان سنج</h2>
+                    <p class="toolitem-desc">
+                      جهت استفاده در استریم های Donothon.
+                    </p>
+                    <span class="toolitem-go">رفتن به ابزار ></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script>
+      document.getElementById("themebtn").addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+          document.documentElement.setAttribute("data-bs-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", "dark");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -17,7 +17,13 @@
     <link rel="stylesheet" href="/assets/css/style.css" />
     <title><%= name %> | Dashboard</title>
   </head>
-  <body dir="rtl">
+  <body dir="rtl" onload="preload()">
+    <div class="preloader">
+      <div class="loader">
+        <div class="ground"></div>
+        <div class="jump"></div>
+      </div>
+    </div>
     <div class="container-fluid">
       <div class="base row">
         <!-- سایدبار -->
@@ -33,10 +39,15 @@
                 <div class="navbar">
                   <div class="navbar-nav me-auto mb-2 mb-lg-0">
                     <div class="user">
-                      <img src="/assets/img/user.webp" alt="User">
+                      <img src="/assets/img/user.webp" alt="User" />
                       <div class="info">
-                        <p class="username">KiaN</p>
-                        <span class="userlink">localhost / KiaN</span>
+                        <p class="username">
+                          <%= userInfo.username || "Not Loaded" %>
+                        </p>
+                        <span class="userlink"
+                          >localhost / <%= userInfo.link || "Not Loaded"
+                          %></span
+                        >
                       </div>
                     </div>
                   </div>
@@ -47,28 +58,31 @@
           <main class="container-fluid">
             <div class="head">داشبورد</div>
             <div class="row pt-5">
-              <div class="col-12 col-xl-7 float-left">
+              <div class="col-12 col-xl-7">
                 <div class="subsc">
                   <div class="proimg">
-                    <img src="/assets/img/coin.webp" alt="">
+                    <img src="/assets/img/coin.webp" alt="" />
                   </div>
                   <div class="info">
                     <p>زمان باقی مانده از اشتراک شما</p>
                     <div class="prog">
-                      <span>27روز</span>
+                      <span><%= userInfo.plan %>روز</span>
                       <div class="prog1">
-                        <div class="prog2" style="width: 90%;"></div>
+                        <div
+                          class="prog2"
+                          style="width: <%= (userInfo.plan / 30) * 100 %>%"
+                        ></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-xl-5 float-left" style="background-color: aliceblue;">
+              <div class="col-12 col-xl-3" style="background-color: aliceblue">
                 <!-- محتوای دیگر این کلون در اینجا قرار می‌گیرد -->
-              ss
+                ss
               </div>
             </div>
-          </main>          
+          </main>
         </div>
       </div>
     </div>
@@ -78,6 +92,8 @@
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/script.js"></script>
     <script>
       document.getElementById("themebtn").addEventListener("click", () => {
         if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
