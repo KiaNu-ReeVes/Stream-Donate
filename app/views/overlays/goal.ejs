@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= name %> / hadaf</title>
+    <title><%= name %> / Goal</title>
     <style>
       body {
         font-family: Arial, Helvetica, sans-serif !important;
@@ -85,7 +85,7 @@
 
       var socket = io();
       socket.on("connect", function () {});
-      socket.on("new-donate-KiaN", newdonate);
+      socket.on("goal-<%= goallink %>", newdonate);
       function newdonate(money) {
         minmoney = parseInt(minmoney) + parseInt(money);
         progbar = parseInt((minmoney / maxmoney) * 100);

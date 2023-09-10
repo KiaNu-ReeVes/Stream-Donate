@@ -69,28 +69,50 @@ export default class Application {
       );
     });
 
-    app.get("/overlay/:user/hadaf", (req, res) => {
-      connection.query("SELECT * FROM goal", function (err, ress) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        // تبدیل نتیجه به شکل مورد نیاز
-        ress.forEach((row) => {
-          if (row.streamer == req.params.user) {
-            const goalconfig = row;
-            return res.render("overlays/hadaf", {
-              name: process.env.PN,
-              title: goalconfig.title,
-              progbar: parseInt(
-                (goalconfig.nowmoney / goalconfig.maxmoney) * 100
-              ),
-              minmoney: goalconfig.nowmoney,
-              maxmoney: goalconfig.maxmoney,
-            });
+    app.get("/overlay/goal", (req, res) => {
+      const goallink = req.query.link;
+      connection.query(
+        "SELECT * FROM users WHERE goallink = ?",
+        [goallink],
+        function (err, ress) {
+          if (!ress[0]) return res.redirect("/");
+          if (err) {
+            console.error(err);
+            return;
           }
-        });
-      });
+          const goalconfig = ress[0];
+          const progbarsdas =
+            (goalconfig.goalmoney / goalconfig.goalmaxmoney) * 100;
+          return res.render("overlays/goal", {
+            name: process.env.PN,
+            goallink: goallink,
+            title: goalconfig.goaltitle,
+            progbar: Math.trunc(progbarsdas),
+            minmoney: goalconfig.goalmoney,
+            maxmoney: goalconfig.goalmaxmoney,
+          });
+        }
+      );
+    });
+
+    app.get("/overlay/alert", (req, res) => {
+      const alertlink = req.query.link;
+      connection.query(
+        "SELECT * FROM users WHERE alertlink = ?",
+        [alertlink],
+        function (err, ress) {
+          if (!ress[0]) return res.redirect("/");
+          if (err) {
+            console.error(err);
+            return;
+          }
+          const alertconfig = ress[0];
+          return res.render("overlays/alert", {
+            name: process.env.PN,
+            alertlink: alertlink,
+          });
+        }
+      );
     });
 
     io.on("connection", (socket) => {
@@ -117,33 +139,45 @@ export default class Application {
 
     app.post("/donate/:streamer", (req, res) => {
       const streamer = req.params.streamer;
-      connection.query("SELECT * FROM goal", function (err, ress) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        // تبدیل نتیجه به شکل مورد نیاز
-        ress.forEach((row) => {
-          if (row.streamer == streamer) {
-            const goalconfig = row;
-            const money = parseInt(req.body.money);
-            connection.query(
-              `INSERT INTO donates (streamer, donator, price, descs) VALUES (?,?,?,?)`,
-              [streamer, req.body.donator, money, req.body.descs],
-              function (err) {
-                console.log(err);
-              }
-            );
-            connection.query(
-              `UPDATE goal SET nowmoney = '${
-                money + parseInt(goalconfig.nowmoney)
-              }' WHERE streamer = '${streamer}'`
-            );
-            io.sockets.emit("new-donate-KiaN", money);
-            return res.send("<h1>Done</h1>");
+      connection.query(
+        "SELECT * FROM users WHERE username = ?",
+        [streamer],
+        function (err, ress) {
+          if (err) {
+            console.error(err);
+            return;
           }
-        });
-      });
+          // تبدیل نتیجه به شکل مورد نیاز
+          const goalconfig = ress[0];
+          const money = parseInt(req.body.money);
+          connection.query(
+            `INSERT INTO donates (streamer, donator, price, descs) VALUES (?,?,?,?)`,
+            [streamer, req.body.donator, money, req.body.descs],
+            function (err) {
+              console.log(err);
+            }
+          );
+          connection.query(
+            `UPDATE users SET goalmoney = '${
+              money + parseInt(goalconfig.goalmoney)
+            }' WHERE username = '${streamer}'`
+          );
+          connection.query(
+            "SELECT * FROM users WHERE username = ?",
+            [streamer],
+            function (err, ress2) {
+              if (!ress2[0]) return res.redirect("/");
+              io.sockets.emit("goal-" + ress2[0].goallink, money);
+              io.sockets.emit("alert-" + ress2[0].alertlink, {
+                donator: req.body.donator,
+                desc: req.body.descs,
+                money: money,
+              });
+            }
+          );
+          return res.send("<h1>Done</h1>");
+        }
+      );
     });
 
     server.listen(port, () => {
