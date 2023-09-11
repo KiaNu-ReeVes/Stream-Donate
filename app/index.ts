@@ -44,24 +44,24 @@ export default class Application {
     app.use("/auth", require("./router/auth"));
 
     app.get("/dashboard", (req, res) => {
-      const token = req.cookies.token;
-      try {
-        const verified = jwt.verify(token, "secretsystemverygood");
-        req.user = verified;
-        connection.query(
-          "SELECT * FROM users WHERE email = ?;",
-          [req.user.userinfo.email],
-          function (err, res2) {
-            const userinfo = res2[0];
-            return res.render("./dashboard/index", {
-              name: process.env.PN,
-              userInfo: userinfo,
-            });
-          }
-        );
-      } catch (err) {
-        return res.redirect("/auth/login");
-      }
+      // const token = req.cookies.token;
+      // try {
+      //   const verified = jwt.verify(token, "secretsystemverygood");
+      //   req.user = verified;
+      connection.query(
+        "SELECT * FROM users WHERE email = ?;",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, res2) {
+          const userinfo = res2[0];
+          return res.render("./dashboard/index", {
+            name: process.env.PN,
+            userInfo: userinfo,
+          });
+        }
+      );
+      // } catch (err) {
+      //   return res.redirect("/auth/login");
+      // }
     });
 
     app.get("/dashboard/tools", (req, res) => {
