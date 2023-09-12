@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <title><%= name %> | Dashboard</title>
+  </head>
+  <body dir="rtl" onload="preload()">
+    <div class="preloader">
+      <div class="loader">
+        <div class="ground"></div>
+        <div class="jump"></div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="base row">
+        <!-- سایدبار -->
+        <%- include("../../include/sidebars") %>
+        <!-- محتوا -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <header>
+            <nav class="navbar navbar-expand-lg bg-transparent">
+              <div class="container-fluid">
+                <button class="softbtn" id="themebtn">
+                  <i class="fa-solid fa-sun"></i>
+                </button>
+                <div class="navbar">
+                  <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="user">
+                      <img src="/assets/img/user.webp" alt="User" />
+                      <div class="info">
+                        <p class="username">
+                          <%= userInfo.username || "Not Loaded" %>
+                        </p>
+                        <span class="userlink"
+                          >localhost / <%= userInfo.link || "Not Loaded"
+                          %></span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+          <main class="container-fluid">
+            <div class="head">هشدار رویداد جدید</div>
+            <div class="main-alert">
+              <input
+                type="url"
+                disabled
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                onkeypress="return false;"
+                name="link"
+                id="link"
+                class="link mt-5"
+                value="http://localhost:3000/overlay/alert?link=<%= userInfo.alertlink %>"
+              />
+              <div class="text-center mt-4">
+                <button
+                  type="button"
+                  id="showtool"
+                  class="btn btn-primary"
+                  onclick="window.open($(this).parent().parent().find('input#link').val(), 'alertshow', 'width=700, height=700, titlebar=0, status=0,menubar=0')"
+                >
+                  نمایش ابزار
+                </button>
+                <button
+                  type="button"
+                  id="copytoollink"
+                  class="btn btn-primary ml-2"
+                  onclick="copyToClipboard($(this).parent().parent().find('input#link').val())"
+                >
+                  کپی لینک
+                </button>
+                <button
+                  type="button"
+                  id="revoke"
+                  class="btn btn-primary revoke-tool"
+                  data-revoke="alert"
+                >
+                  باطل کردن و تغییر لینک این ابزار
+                </button>
+              </div>
+              <div class="text-center mt-5">
+                <h3 class="text-end">نمایش هشدار حمایت جدید نمونه</h3>
+                <form id="showtestdoantion" class="form-group row text-center">
+                  <div class="col-12 col-xl-10 text-end">
+                    <label for="toollink">مبلغ حمایت نمونه:</label>
+                    <input
+                      type="number"
+                      class="form-control link text-end"
+                      id="testamount"
+                      name="testamount"
+                      max="999999999"
+                      min="100"
+                      value="1000"
+                    />
+                  </div>
+                  <div class="col-12 col-xl-2 mt-4">
+                    <button
+                      style="float: unset; white-space: nowrap"
+                      type="submit"
+                      class="btn btn-primary"
+                    >
+                      نمایش هشدار
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script>
+      document.getElementById("themebtn").addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+          document.documentElement.setAttribute("data-bs-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", "dark");
+        }
+      });
+      (function setup() {
+        $("#showtestdoantion").on("submit", (e) => {
+          e.preventDefault();
+          $.post("/fakedonate", {
+            streamer: "<%= userInfo.username %>",
+            money: $("#testamount").val(),
+          });
+        });
+      })();
+      function copyToClipboard(copyText) {
+        navigator.clipboard.writeText(copyText);
+      }
+    </script>
+  </body>
+</html>

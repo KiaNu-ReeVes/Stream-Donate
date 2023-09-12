@@ -77,6 +77,31 @@ export default class Application {
       );
     });
 
+    app.get("/dashboard/tools/alert", (req, res) => {
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          return res.render("./dashboard/tools/alert", {
+            name: process.env.PN,
+            userInfo: ress[0],
+          });
+        }
+      );
+    });
+    app.get("/dashboard/tools/donate", (req, res) => {
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          return res.render("./dashboard/tools/donate", {
+            name: process.env.PN,
+            userInfo: ress[0],
+          });
+        }
+      );
+    });
+
     app.get("/overlay/goal", (req, res) => {
       const goallink = req.query.link;
       connection.query(
@@ -145,6 +170,22 @@ export default class Application {
       );
     });
 
+    app.post("/fakedonate", (req, res) => {
+      const info = req.body;
+      connection.query(
+        "SELECT * FROM users WHERE username = ?",
+        [info.streamer],
+        function (err, ress2) {
+          if (!ress2[0]) return;
+          io.sockets.emit("alert-" + ress2[0].alertlink, {
+            donator: "حمایت تست",
+            desc: "این هشدار برای تست است",
+            money: info.money,
+          });
+        }
+      );
+    });
+
     app.post("/donate/:streamer", (req, res) => {
       const streamer = req.params.streamer;
       connection.query(
@@ -170,19 +211,12 @@ export default class Application {
               money + parseInt(goalconfig.goalmoney)
             }' WHERE username = '${streamer}'`
           );
-          connection.query(
-            "SELECT * FROM users WHERE username = ?",
-            [streamer],
-            function (err, ress2) {
-              if (!ress2[0]) return res.redirect("/");
-              io.sockets.emit("goal-" + ress2[0].goallink, money);
-              io.sockets.emit("alert-" + ress2[0].alertlink, {
-                donator: req.body.donator,
-                desc: req.body.descs,
-                money: money,
-              });
-            }
-          );
+          io.sockets.emit("goal-" + ress[0].goallink, money);
+          io.sockets.emit("alert-" + ress[0].alertlink, {
+            donator: req.body.donator,
+            desc: req.body.descs,
+            money: money,
+          });
           return res.send("<h1>Done</h1>");
         }
       );

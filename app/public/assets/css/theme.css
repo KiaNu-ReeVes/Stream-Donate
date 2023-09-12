@@ -123,11 +123,22 @@
   --bs-form-valid-border-color: #198754;
   --bs-form-invalid-color: #dc3545;
   --bs-form-invalid-border-color: #dc3545;
+  --color-black: #000000;
+  --color-gray: #555555;
+  --color-light: #F4F4FC;
+  --color-light2: #EBEBF5;
+  --color-light3: #DFE1EE;
+  --color-light3: #C1C5DF;
+  --color-violet: #F6F2FF;
+  --color-violet2: #B39DDB;
+  --color-violet3: #703FC4;
+  --color-orange: #FF7144;
+  --color-white: #ffffff;
 }
 
 [data-bs-theme="dark"] {
   color-scheme: dark;
-  --bs-body-color: #dee2e6;
+  --bs-body-color: #ffffff;
   --bs-body-color-rgb: 222, 226, 230;
   --bs-body-bg: #212529;
   --bs-body-bg-rgb: 33, 37, 41;
@@ -177,6 +188,25 @@
   --bs-form-valid-border-color: #75b798;
   --bs-form-invalid-color: #ea868f;
   --bs-form-invalid-border-color: #ea868f;
+}
+
+.btn-primary {
+  color: #fff;
+  box-shadow: rgba(112, 63, 196, 0.4) 0 10px 25px;
+  background-image: linear-gradient(160deg, #703FC4 0%, #583398 100%);
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+
+html[data-bs-theme="dark"] body {
+  background: rgb(15,14,22);
+background: linear-gradient(159deg, rgba(15,14,22,1) 0%, rgba(19,17,32,1) 100%);
+}
+
+html[data-bs-theme="dark"] body .base {
+  background: rgb(31,34,35);
+  background: linear-gradient(159deg, rgba(31,34,35,1) 0%, rgba(36,42,43,1) 100%);
 }
 .preloader {
   position: absolute;

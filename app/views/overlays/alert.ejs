@@ -75,23 +75,50 @@
       </div>
     </div>
     <audio id="mainaudio">
-      <source src="https://reymit.ir/overlay/coin.mp3" />
+      <source src="/assets/coin.mp3" />
     </audio>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/assets/js/jquery.min.js"></script>
     <script>
       var socket = io();
-      socket.on("connect", function () {});
-      socket.on("alert-" + "<%= alertlink %>", showAlert);
-      function showAlert(alertInfo) {
-        $(".alertbody").fadeIn();
-        $("#donaitor").html(alertInfo.donator);
-        $("#money").html(`مبلغ ${alertInfo.money} تومان حمایت کرد`);
-        $("#decs").html(alertInfo.desc);
-        setTimeout(() => {
-          $(".alertbody").fadeOut();
-        }, 5000);
-      }
+var sends = true;
+var socketQueue = [];
+
+socket.on("connect", function () {});
+
+socket.on("alert-" + "<%= alertlink %>", function (alertInfo) {
+  if (sends) {
+    showAlert(alertInfo);
+  } else {
+    socketQueue.push(alertInfo); // اضافه کردن پیام به صف انتظار
+  }
+});
+
+function showAlert(alertInfo) {
+  sends = false;
+  $(".alertbody").fadeIn();
+  $("#donaitor").html(alertInfo.donator);
+  $("#money").html(`مبلغ ${alertInfo.money} تومان حمایت کرد`);
+  $("#decs").html(alertInfo.desc);
+  var audio = $("#mainaudio")[0];
+  audio.play();
+  setTimeout(() => {
+    $(".alertbody").fadeOut();
+    setTimeout(() => {
+      sends = true;
+      playNextSocket(); // فراخوانی تابع برای پخش پیام‌های در صف انتظار
+    }, 1000);
+  }, 5000);
+}
+
+// تابعی برای پخش پیام‌های در صف انتظار
+function playNextSocket() {
+  if (socketQueue.length > 0 && sends) {
+    var nextSocket = socketQueue.shift();
+    showAlert(nextSocket);
+  }
+}
+
     </script>
   </body>
 </html>

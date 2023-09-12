@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <title><%= name %> | Dashboard</title>
+  </head>
+  <body dir="rtl" onload="preload()">
+    <div class="preloader">
+      <div class="loader">
+        <div class="ground"></div>
+        <div class="jump"></div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="base row">
+        <!-- سایدبار -->
+        <%- include("../../include/sidebars") %>
+        <!-- محتوا -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <header>
+            <nav class="navbar navbar-expand-lg bg-transparent">
+              <div class="container-fluid">
+                <button class="softbtn" id="themebtn">
+                  <i class="fa-solid fa-sun"></i>
+                </button>
+                <div class="navbar">
+                  <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="user">
+                      <img src="/assets/img/user.webp" alt="User" />
+                      <div class="info">
+                        <p class="username">
+                          <%= userInfo.username || "Not Loaded" %>
+                        </p>
+                        <span class="userlink"
+                          >localhost / <%= userInfo.link || "Not Loaded"
+                          %></span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+          <main class="container-fluid">
+            <div class="head">هدف حمایت مالی</div>
+            <div class="main-alert">
+              <input
+                type="url"
+                disabled
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                onkeypress="return false;"
+                name="link"
+                id="link"
+                class="link mt-5"
+                value="http://localhost:3000/overlay/goal?link=<%= userInfo.goallink %>"
+              />
+              <div class="text-center mt-4">
+                <button
+                  type="button"
+                  id="showtool"
+                  class="btn btn-primary"
+                  onclick="window.open($(this).parent().parent().find('input#link').val(), 'alertshow', 'width=700, height=400, titlebar=0, status=0,menubar=0')"
+                >
+                  نمایش ابزار
+                </button>
+                <button
+                  type="button"
+                  id="copytoollink"
+                  class="btn btn-primary ml-2"
+                  onclick="copyToClipboard($(this).parent().parent().find('input#link').val())"
+                >
+                  کپی لینک
+                </button>
+                <button
+                  type="button"
+                  id="revoke"
+                  class="btn btn-primary revoke-tool"
+                  data-revoke="alert"
+                >
+                  باطل کردن و تغییر لینک این ابزار
+                </button>
+              </div>
+              <div>
+                <form id="goal" style="font-size: small;" class="form text-end mt-5">
+                  <div class="row d-flex">
+                    <div class="col">
+                      <label class="switch">
+                        <input type="checkbox" id="exact_amount_in_paypage" name="exact_amount_in_paypage" checked="" data-og-val="1">
+                        <span class="slider round"></span>
+                      </label>
+                      <label for="exact_amount_in_paypage" class="slb">نمایش مبلغ دقیق هدف روی درگاه</label>
+                    </div>
+                  </div>
+                  <div class="row d-flex mt-4">
+                    <div class="form-group float-left col-md-4">
+                      <label for="goaltitle">* عنوان هدف:</label>
+                      <input class="form-control link" type="text" id="goaltitle" name="goaltitle" value="تست" maxlength="100" required="" data-og-val="تست">
+                    </div>
+                    <div class="form-group float-left col-md-4">
+                      <label for="goalamount">* مبلغ هدف (تومان):</label>
+                      <input class="form-control link" type="number" id="goalamount" value="50000" name="goalamount" max="999999999" min="1" required="" data-og-val="50000">
+                    </div>
+                    <div class="form-group float-left col-md-4">
+                      <label for="goalboost">میزان پیشرفت اولیه هدف (تومان):</label>
+                      <input class="form-control link" type="number" id="goalboost" name="goalboost" value="0" max="999999999" min="0" data-og-val="0">
+                    </div>
+                  </div>
+                  <div class="mt-5">
+                    <button type="submit" class="btn btn-primary" style="display: inline-block;">ذخیره تغییرات</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script>
+      document.getElementById("themebtn").addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+          document.documentElement.setAttribute("data-bs-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", "dark");
+        }
+      });
+      function copyToClipboard(copyText) {
+        navigator.clipboard.writeText(copyText);
+      }
+    </script>
+  </body>
+</html>

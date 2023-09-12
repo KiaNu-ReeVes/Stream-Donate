@@ -56,12 +56,6 @@ body {
   border: 1px white solid;
   padding: 20px;
 }
-@media screen and (max-width: 1200px) {
-  .base {
-    width: 100%;
-    height: 100%;
-  }
-}
 .navbar {
   align-items: start !important;
 }
@@ -162,7 +156,7 @@ main .head {
   left: 0;
   right: 0;
   margin: auto;
-  background-color: #f6f2ff;
+  background-color: var(--color-violet);
   height: 80px;
   border-radius: 30px;
 }
@@ -210,7 +204,7 @@ main .head {
 .toolscol-item {
   width: 100%;
   height: 100%;
-  background-color: #f6f2ff;
+  background-color: var(--color-violet);
   border-radius: 30px;
   padding: 25px;
   /* margin: 10px 10px; */
@@ -236,4 +230,43 @@ main .head {
   font-size: 13px;
   padding: 10px 0 0;
   font-weight: bolder;
+}
+.main-alert {
+  width: 70%;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.main-alert .link {
+  background: var(--color-light);
+  border: medium none;
+  border-radius: 30px;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: normal;
+  height: auto;
+  margin: 3px 0;
+  padding: 14px 25px 13px;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  line-height: 1.5;
+  color: #495057;
+  direction: ltr;
+  text-align: left;
+}
+.main-alert div button {
+  margin-left: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+  .base {
+    width: 100%;
+    height: 100%;
+  }
+  .main-alert {
+    width: 100%;
+  }
 }
