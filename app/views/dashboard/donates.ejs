@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <title><%= name %> | Dashboard</title>
+  </head>
+  <body dir="rtl" onload="preload()">
+    <div class="preloader">
+      <div class="loader">
+        <div class="ground"></div>
+        <div class="jump"></div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="base row">
+        <!-- سایدبار -->
+        <%- include("../include/sidebars") %>
+        <!-- محتوا -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <header>
+            <nav class="navbar navbar-expand-lg bg-transparent">
+              <div class="container-fluid">
+                <button class="softbtn" id="themebtn">
+                  <i class="fa-solid fa-sun"></i>
+                </button>
+                <div class="navbar">
+                  <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="user">
+                      <img src="/assets/img/user.webp" alt="User" />
+                      <div class="info">
+                        <p class="username">
+                          <%= userInfo.username || "Not Loaded" %>
+                        </p>
+                        <span class="userlink"
+                          >localhost / <%= userInfo.link || "Not Loaded"
+                          %></span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+          <main class="container-fluid">
+            <div class="head">حمایت‌ها</div>
+            <div class="row" style="padding: 0 10px">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">نام حامی</th>
+                    <th scope="col">مبلغ</th>
+                    <th scope="col">توضیحات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < donates.length; i++) { %>
+                        <tr>
+                          <th scope="row"><%= donates[i].id %></th>
+                          <td><%= moment(donates[i].date).format('D, MM, YYYY'); %></td>
+                          <td><%= donates[i].donator %></td>
+                          <td><%= donates[i].price %></td>
+                          <td><%= donates[i].descs %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script>
+      document.getElementById("themebtn").addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+          document.documentElement.setAttribute("data-bs-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", "dark");
+        }
+      });
+    </script>
+  </body>
+</html>

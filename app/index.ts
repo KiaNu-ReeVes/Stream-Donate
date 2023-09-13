@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import moment from 'moment';
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 
@@ -146,6 +147,28 @@ export default class Application {
             if (err) return res.json({success: false})
           });
           return res.json({success: true, randomletter: randomletter})
+        }
+      );
+    });
+
+    app.get("/dashboard/donates", (req, res) => {
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          if (!ress[0]) return
+          connection.query(
+            "SELECT * FROM donates WHERE streamer = ? ORDER BY id DESC;",
+            [ress[0].username],
+            function (err, res2s) {
+              return res.render("./dashboard/donates", {
+                name: process.env.PN,
+                userInfo: ress[0],
+                donates: res2s,
+                moment: moment
+              });
+            }
+          );
         }
       );
     });
