@@ -41,6 +41,19 @@ export default class Application {
       })
     );
     var sio = {};
+
+    function makeid(length) {
+      let result = '';
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const charactersLength = characters.length;
+      let counter = 0;
+      while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+      }
+      return result;
+    }
+
     app.use("/auth", require("./router/auth"));
 
     app.get("/dashboard", (req, res) => {
@@ -98,6 +111,41 @@ export default class Application {
             name: process.env.PN,
             userInfo: ress[0],
           });
+        }
+      );
+    });
+    app.post("/dashboard/tools/donate", (req, res) => {
+      const postinfo = req.body
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          if (!ress[0]) return res.json({success: false})
+          connection.query(
+            `UPDATE users SET goaltitle = ?, goalmoney = ?, goalmaxmoney = ?  WHERE username = '${ress[0].username}'`, [postinfo.goaltitle, postinfo.goalmoney, postinfo.goalmaxmoney]
+          , function(err) {
+            if (err) return res.json({success: false})
+            io.sockets.emit("newgoal-" + ress[0].goallink, postinfo);
+          });
+          return res.json({success: true})
+        }
+      );
+    });
+
+    app.post("/dashboard/tools/revokeurl", (req, res) => {
+      const postinfo = req.body
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        ["kian.rabiei1387@gmail.com"],
+        function (err, ress) {
+          if (!ress[0]) return res.json({success: false})
+          var randomletter = makeid(50)
+          connection.query(
+            `UPDATE users SET ${postinfo.type} = ?  WHERE ${postinfo.type} = ?`, [randomletter ,postinfo.link]
+          , function(err) {
+            if (err) return res.json({success: false})
+          });
+          return res.json({success: true, randomletter: randomletter})
         }
       );
     });

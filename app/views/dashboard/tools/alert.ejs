@@ -137,6 +137,7 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/script.js"></script>
     <script>
+      var alertlink = "<%= userInfo.alertlink %>"
       document.getElementById("themebtn").addEventListener("click", () => {
         if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
           document.documentElement.setAttribute("data-bs-theme", "light");
@@ -151,6 +152,17 @@
             streamer: "<%= userInfo.username %>",
             money: $("#testamount").val(),
           });
+        });
+        $("#revoke").on("click", () => {
+          $.post("/dashboard/tools/revokeurl", {
+            type: "alertlink",
+            link: alertlink
+          }).done((response) => {
+            if (response.success == true) {
+              alertlink = response.randomletter
+              $("#link").val("http://localhost:3000/overlay/alert?link=" + response.randomletter)
+            }
+          })
         });
       })();
       function copyToClipboard(copyText) {

@@ -75,7 +75,6 @@
       var maxmoney = "<%= maxmoney %>";
       (function setup() {
         Resize();
-        console.log({ title, progbar, minmoney, maxmoney });
         $(".goaltitle").text(title);
         $(".progr")
           .css("width", `${progbar}%`)
@@ -85,6 +84,19 @@
 
       var socket = io();
       socket.on("connect", function () {});
+      socket.on("newgoal-<%= goallink %>", setupnewgoal);
+      function setupnewgoal(info) {
+        console.log(info)
+        title = info.goaltitle;
+        minmoney = info.goalmoney;
+        maxmoney = info.goalmaxmoney;
+        progbar = parseInt((minmoney / maxmoney) * 100);
+        $(".goaltitle").text(title);
+        $(".progr")
+          .css("width", `${progbar}%`)
+          .text(progbar + "%");
+        $(".goaldesc").text(`${maxmoney} / ${minmoney}`);
+      }
       socket.on("goal-<%= goallink %>", newdonate);
       function newdonate(money) {
         minmoney = parseInt(minmoney) + parseInt(money);

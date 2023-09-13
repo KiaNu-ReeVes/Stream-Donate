@@ -92,38 +92,68 @@
                   type="button"
                   id="revoke"
                   class="btn btn-primary revoke-tool"
-                  data-revoke="alert"
                 >
                   باطل کردن و تغییر لینک این ابزار
                 </button>
               </div>
               <div>
-                <form id="goal" style="font-size: small;" class="form text-end mt-5">
-                  <div class="row d-flex">
-                    <div class="col">
-                      <label class="switch">
-                        <input type="checkbox" id="exact_amount_in_paypage" name="exact_amount_in_paypage" checked="" data-og-val="1">
-                        <span class="slider round"></span>
-                      </label>
-                      <label for="exact_amount_in_paypage" class="slb">نمایش مبلغ دقیق هدف روی درگاه</label>
-                    </div>
-                  </div>
+                <form
+                  id="goal"
+                  style="font-size: small"
+                  class="form text-end mt-5"
+                >
                   <div class="row d-flex mt-4">
                     <div class="form-group float-left col-md-4">
                       <label for="goaltitle">* عنوان هدف:</label>
-                      <input class="form-control link" type="text" id="goaltitle" name="goaltitle" value="تست" maxlength="100" required="" data-og-val="تست">
+                      <input
+                        class="form-control link"
+                        type="text"
+                        id="goaltitle"
+                        name="goaltitle"
+                        value="تست"
+                        maxlength="100"
+                        required=""
+                        data-og-val="تست"
+                      />
                     </div>
                     <div class="form-group float-left col-md-4">
                       <label for="goalamount">* مبلغ هدف (تومان):</label>
-                      <input class="form-control link" type="number" id="goalamount" value="50000" name="goalamount" max="999999999" min="1" required="" data-og-val="50000">
+                      <input
+                        class="form-control link"
+                        type="number"
+                        id="goalamount"
+                        value="50000"
+                        name="goalamount"
+                        max="999999999"
+                        min="1"
+                        required=""
+                        data-og-val="50000"
+                      />
                     </div>
                     <div class="form-group float-left col-md-4">
-                      <label for="goalboost">میزان پیشرفت اولیه هدف (تومان):</label>
-                      <input class="form-control link" type="number" id="goalboost" name="goalboost" value="0" max="999999999" min="0" data-og-val="0">
+                      <label for="goalboost"
+                        >میزان پیشرفت اولیه هدف (تومان):</label
+                      >
+                      <input
+                        class="form-control link"
+                        type="number"
+                        id="goalboost"
+                        name="goalboost"
+                        value="0"
+                        max="999999999"
+                        min="0"
+                        data-og-val="0"
+                      />
                     </div>
                   </div>
                   <div class="mt-5">
-                    <button type="submit" class="btn btn-primary" style="display: inline-block;">ذخیره تغییرات</button>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      style="display: inline-block"
+                    >
+                      ذخیره تغییرات
+                    </button>
                   </div>
                 </form>
               </div>
@@ -141,6 +171,7 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/script.js"></script>
     <script>
+      var goallink = "<%= userInfo.goallink %>"
       document.getElementById("themebtn").addEventListener("click", () => {
         if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
           document.documentElement.setAttribute("data-bs-theme", "light");
@@ -148,6 +179,27 @@
           document.documentElement.setAttribute("data-bs-theme", "dark");
         }
       });
+      (function ss() {
+        $("#goal").on("submit", (e) => {
+          e.preventDefault();
+          $.post("/dashboard/tools/donate", {
+            goaltitle: $("#goaltitle").val(),
+            goalmoney: $("#goalboost").val(),
+            goalmaxmoney: $("#goalamount").val(),
+          })
+        });
+        $("#revoke").on("click", () => {
+          $.post("/dashboard/tools/revokeurl", {
+            type: "goallink",
+            link: goallink
+          }).done((response) => {
+            if (response.success == true) {
+              goallink = response.randomletter
+              $("#link").val("http://localhost:3000/overlay/goal?link=" + response.randomletter)
+            }
+          })
+        });
+      })();
       function copyToClipboard(copyText) {
         navigator.clipboard.writeText(copyText);
       }

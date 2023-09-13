@@ -188,6 +188,19 @@
   --bs-form-valid-border-color: #75b798;
   --bs-form-invalid-color: #ea868f;
   --bs-form-invalid-border-color: #ea868f;
+  --color-black: #ffffff !important;
+  --color-gray: #eeeeee !important;
+  --color-gray2: #484956;
+  --color-light: #1F2229 !important;
+  --color-light2: #292B33 !important;
+  --color-light3: #15141c !important;
+  --color-light3: #0f0e16 !important;
+  --color-violet: #F6F2FF !important;
+  --color-violet2: #B39DDB !important;
+  --color-violet3: #703FC4 !important;
+  --color-violet4: #F6F2FF !important;
+  --color-orange: #FF7144 !important;
+  --color-white: #131417 !important;
 }
 
 .btn-primary {
@@ -201,12 +214,21 @@
 
 html[data-bs-theme="dark"] body {
   background: rgb(15,14,22);
-background: linear-gradient(159deg, rgba(15,14,22,1) 0%, rgba(19,17,32,1) 100%);
+  background: linear-gradient(159deg, rgba(15,14,22,1) 0%, rgba(19,17,32,1) 100%);
 }
 
-html[data-bs-theme="dark"] body .base {
+html[data-bs-theme="dark"] .base {
   background: rgb(31,34,35);
   background: linear-gradient(159deg, rgba(31,34,35,1) 0%, rgba(36,42,43,1) 100%);
+}
+html[data-bs-theme="dark"] .subsc {
+  background: var(--color-light);
+}
+html[data-bs-theme="dark"] .nav-link {
+  color: white !important;
+}
+html[data-bs-theme="dark"] path {
+  fill: white;
 }
 .preloader {
   position: absolute;

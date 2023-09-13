@@ -77,9 +77,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-xl-3" style="background-color: aliceblue">
+              <div class="col-12 col-xl-3">
                 <!-- محتوای دیگر این کلون در اینجا قرار می‌گیرد -->
-                ss
               </div>
             </div>
           </main>
@@ -98,8 +97,10 @@
       document.getElementById("themebtn").addEventListener("click", () => {
         if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
           document.documentElement.setAttribute("data-bs-theme", "light");
+          $("#logolight").attr('src','/assets/img/untitled-1_iyfa.png');
         } else {
           document.documentElement.setAttribute("data-bs-theme", "dark");
+          $("#logolight").attr('src','/assets/img/Codialog-white.png');
         }
       });
     </script>
