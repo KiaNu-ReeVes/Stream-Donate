@@ -65,11 +65,11 @@ export default class Application {
         const token = req.cookies.token;
         try {
           // اینجا می‌توانید جواب توکن را بررسی کنید و در صورت معتبر بودن ادامه دهید
-          // const verified = jwt.verify(token, "secretsystemverygood");
+          const verified = jwt.verify(token, "secretsystemverygood");
 
           connection.query(
             "SELECT * FROM users WHERE email = ?;",
-            ["kian.rabiei1387@gmail.com"],
+            [verified.email],
             function (err, res2) {
               if (err) {
                 reject(err);
@@ -87,7 +87,6 @@ export default class Application {
     app.get("/dashboard", async (req, res) => {
       try {
         const userinfo = await checkuser(req);
-        console.log(userinfo);
         return res.render("./dashboard/index", {
           name: process.env.PN,
           userInfo: userinfo,
@@ -98,70 +97,66 @@ export default class Application {
       }
     });
 
-    app.get("/dashboard/tools", (req, res) => {
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          return res.render("./dashboard/tools", {
-            name: process.env.PN,
-            userInfo: ress[0],
-          });
-        }
-      );
+    app.get("/dashboard/tools", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
+        return res.render("./dashboard/tools", {
+          name: process.env.PN,
+          userInfo: userinfo,
+        });
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
 
-    app.get("/dashboard/tools/alert", (req, res) => {
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          return res.render("./dashboard/tools/alert", {
-            name: process.env.PN,
-            userInfo: ress[0],
-          });
-        }
-      );
+    app.get("/dashboard/tools/alert", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
+        return res.render("./dashboard/tools/alert", {
+          name: process.env.PN,
+          userInfo: userinfo,
+        });
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
-    app.get("/dashboard/tools/donate", (req, res) => {
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          return res.render("./dashboard/tools/donate", {
-            name: process.env.PN,
-            userInfo: ress[0],
-          });
-        }
-      );
+    app.get("/dashboard/tools/donate", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
+        return res.render("./dashboard/tools/donate", {
+          name: process.env.PN,
+          userInfo: userinfo,
+        });
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
-    app.post("/dashboard/tools/donate", (req, res) => {
+    app.post("/dashboard/tools/donate", async (req, res) => {
       const postinfo = req.body;
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          if (!ress[0]) return res.json({ success: false });
-          connection.query(
-            `UPDATE users SET goaltitle = ?, goalmoney = ?, goalmaxmoney = ?  WHERE username = '${ress[0].username}'`,
-            [postinfo.goaltitle, postinfo.goalmoney, postinfo.goalmaxmoney],
-            function (err) {
-              if (err) return res.json({ success: false });
-              io.sockets.emit("newgoal-" + ress[0].goallink, postinfo);
-            }
-          );
-          return res.json({ success: true });
-        }
-      );
+      try {
+        const userinfo = await checkuser(req);
+        connection.query(
+          `UPDATE users SET goaltitle = ?, goalmoney = ?, goalmaxmoney = ?  WHERE username = '${userinfo.username}'`,
+          [postinfo.goaltitle, postinfo.goalmoney, postinfo.goalmaxmoney],
+          function (err) {
+            if (err) return res.json({ success: false });
+            io.sockets.emit("newgoal-" + userinfo.goallink, postinfo);
+          }
+        );
+        return res.json({ success: true });
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
 
-    app.post("/dashboard/tools/revokeurl", (req, res) => {
+    app.post("/dashboard/tools/revokeurl", async (req, res) => {
       const postinfo = req.body;
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          if (!ress[0]) return res.json({ success: false });
+      try {
+        const userinfo = await checkuser(req);
           var randomletter = makeid(50);
           connection.query(
             `UPDATE users SET ${postinfo.type} = ?  WHERE ${postinfo.type} = ?`,
@@ -171,30 +166,31 @@ export default class Application {
             }
           );
           return res.json({ success: true, randomletter: randomletter });
+        } catch (err) {
+          console.error(err);
+          return res.redirect("/auth/login");
         }
-      );
     });
 
-    app.get("/dashboard/donates", (req, res) => {
-      connection.query(
-        "SELECT * FROM users WHERE email = ?",
-        ["kian.rabiei1387@gmail.com"],
-        function (err, ress) {
-          if (!ress[0]) return;
+    app.get("/dashboard/donates", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
           connection.query(
             "SELECT * FROM donates WHERE streamer = ? ORDER BY id DESC;",
-            [ress[0].username],
+            [userinfo.username],
             function (err, res2s) {
               return res.render("./dashboard/donates", {
                 name: process.env.PN,
-                userInfo: ress[0],
+                userInfo: userinfo,
                 donates: res2s,
                 moment: moment,
               });
             }
           );
+        } catch (err) {
+          console.error(err);
+          return res.redirect("/auth/login");
         }
-      );
     });
 
     app.get("/overlay/goal", (req, res) => {
