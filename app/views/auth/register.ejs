@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/3d65360e1b.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/auth.css" />
+    <title><%= name %> | Login</title>
+  </head>
+  <body dir="rtl">
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">ساخت اکانت</h1>
+            <button
+              type="button"
+              class="btn-close"
+              style="margin: 0"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            هیچ اکانتی با این مشخصات یافت نشد. با کلیک روی دکمه "ساخت اکانت" شما
+            میتوانید با این مشخصات اکانت خود را بسازید
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="createacc" class="btn btn-primary">
+              ساخت اکانت
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="base">
+      <div class="container-fluid">
+        <div class="logo text-center">
+          <img
+            src="/assets/img/untitled-1_iyfa.png"
+            alt="logo"
+            style="width: 30%"
+          />
+        </div>
+        <div class="alert d-none"></div>
+        <form class="row registerform mt-3" dir="ltr">
+          <div class="col-6 mb-3 fullname">
+            <input
+              type="text"
+              name="firstname"
+              id="firstname"
+              class="sd-link"
+              placeholder="First Name"
+              required
+            />
+          </div>
+          <div class="col-6 mb-3 fullname">
+            <input
+              type="text"
+              name="lastname"
+              id="lastname"
+              class="sd-link"
+              placeholder="Last Name"
+              required
+            />
+          </div>
+          <div class="col-12 mb-3">
+            <input
+              type="text"
+              name="username"
+              id="username"
+              class="sd-link"
+              placeholder="Username"
+              required
+            />
+          </div>
+          <div class="col-12 mb-3">
+            <input
+              type="text"
+              name="link"
+              id="link"
+              class="sd-link"
+              placeholder="<%= name %> / "
+              required
+            />
+          </div>
+          <div class="col-12 mb-3">
+            <input
+              type="tel"
+              name="tel"
+              id="tel"
+              class="sd-link"
+              placeholder="Phone Number"
+              required
+            />
+          </div>
+          <div class="col-6 mt-3 buttonhayeauth">
+            <button type="reset" class="btn btn-primary">Reset</button>
+          </div>
+          <div class="col-6 mt-3 buttonhayeauth">
+            <button type="submit" class="btn btn-primary">Done</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script>
+      (function setup() {
+        $("form.registerform").on("submit", function (e) {
+          e.preventDefault();
+          const infoPost = {
+            firstname: $('[name="firstname"]').val(),
+            lastname: $('[name="lastname"]').val(),
+            phonenumber: $('[name="tel"]').val(),
+            username: $('[name="username"]').val(),
+            link: $('[name="link"]').val(),
+          };
+          $(".alert").addClass("d-none");
+          $.post("/auth/register", { infoPost: infoPost })
+            .done(function (response) {
+              if (response.success == true) {
+                window.location.href = "/";
+              } else {
+                $(".alert").removeClass("d-none").text(response.message);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              alert(errorThrown);
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>

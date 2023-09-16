@@ -18,20 +18,66 @@
     <title><%= name %> | Login</title>
   </head>
   <body dir="rtl">
-    <div class="base">
-        <div class="container-fluid">
-            <div class="logo text-center">
-                <img src="/assets/img/untitled-1_iyfa.png" alt="logo" style="width: 30%;">
-            </div>
-            <form class="row loginform" dir="ltr">
-                <input type="email" name="email" id="email" class="col-12 mt-5 mb-3" placeholder="Email" required>
-                <input type="password" name="password" id="password" class="col-12 mb-3" placeholder="Password" required>
-                <input type="checkbox" name="rememberme" id="rememberme" checked>
-                <label for="rememberme">Remember Me</label>
-                <button type="reset" class="col-6 mt-3">Reset</button>
-                <button type="submit" class="col-6 mt-3">Done</button>
-            </form>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">ساخت اکانت</h1>
+            <button type="button" class="btn-close" style="margin: 0;" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            هیچ اکانتی با این مشخصات یافت نشد. با کلیک روی دکمه "ساخت اکانت" شما میتوانید با این مشخصات اکانت خود را بسازید
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="createacc" class="btn btn-primary">ساخت اکانت</button>
+          </div>
         </div>
+      </div>
+    </div>
+    <div class="base">
+      <div class="container-fluid">
+        <div class="logo text-center">
+          <img
+            src="/assets/img/untitled-1_iyfa.png"
+            alt="logo"
+            style="width: 30%"
+          />
+        </div>
+        <div class="alert d-none"></div>
+        <form class="row loginform" dir="ltr">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="col-12 mt-5 mb-3 sd-link"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="col-12 mb-3 sd-link"
+            placeholder="Password"
+            required
+          />
+          <div class="remb">
+            <input type="checkbox" name="rememberme" id="rememberme" checked />
+            <label for="rememberme">Remember Me</label>
+          </div>
+          <div class="col-6 mt-3 buttonhayeauth">
+            <button type="reset" class=" btn btn-primary">
+              Reset
+            </button>
+          </div>
+          <div class="col-6 mt-3 buttonhayeauth">
+            <button type="submit" class="btn btn-primary">
+              Done
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script
@@ -39,5 +85,38 @@
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
       crossorigin="anonymous"
     ></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script>
+      (function setup() {
+        $("form.loginform").on("submit", function (e) {
+          e.preventDefault();
+          const infoPost = {
+            email: $('[name="email"]').val(),
+            password: $('[name="password"]').val(),
+            rememberme: $('[name="rememberme"]').val(),
+          };
+          $(".alert").addClass("d-none");
+          $.post("/auth/login", { infoPost: infoPost })
+            .done(function (response) {
+              if (response.newacc == true) {
+                $('#exampleModal').modal('show');
+              } else {
+                if (response.success == true) {
+                  window.location.href = "/dashboard";
+                } else {
+                  $(".alert").removeClass("d-none").text(response.message);
+                }
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              alert(errorThrown);
+            });
+        });
+        $("#createacc").on("click", function(e) {
+          e.preventDefault();
+          window.location.href = "/auth/register"
+        })
+      })();
+    </script>
   </body>
 </html>

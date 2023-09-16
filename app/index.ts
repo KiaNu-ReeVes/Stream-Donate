@@ -64,17 +64,28 @@ export default class Application {
       return new Promise((resolve, reject) => {
         const token = req.cookies.token;
         try {
-          // اینجا می‌توانید جواب توکن را بررسی کنید و در صورت معتبر بودن ادامه دهید
+          if (!token) return reject("jwt must be provided");
           const verified = jwt.verify(token, "secretsystemverygood");
-
           connection.query(
             "SELECT * FROM users WHERE email = ?;",
-            [verified.email],
+            [verified.userinfo.email],
             function (err, res2) {
               if (err) {
                 reject(err);
               } else {
-                resolve(res2[0]);
+                const user = res2[0];
+                const expirationDate = moment(user.plan); // تبدیل تاریخ دریافتی از دیتابیس به متغیر moment
+                const currentDate = moment(); // تاریخ امروز
+                const daysRemaining = expirationDate.diff(currentDate, "days"); // محاسبه تعداد روز های باقی مانده
+
+                // بررسی تاریخ و انجام عملیات مورد نیاز
+                if (daysRemaining >= 0) {
+                  user.plan = daysRemaining; // تنظیم تعداد روز باقی مانده
+                  resolve(user);
+                } else {
+                  user.plan = 0;
+                  resolve(user);
+                }
               }
             }
           );
@@ -92,7 +103,6 @@ export default class Application {
           userInfo: userinfo,
         });
       } catch (err) {
-        console.error(err);
         return res.redirect("/auth/login");
       }
     });
@@ -105,7 +115,6 @@ export default class Application {
           userInfo: userinfo,
         });
       } catch (err) {
-        console.error(err);
         return res.redirect("/auth/login");
       }
     });
@@ -118,7 +127,6 @@ export default class Application {
           userInfo: userinfo,
         });
       } catch (err) {
-        console.error(err);
         return res.redirect("/auth/login");
       }
     });
@@ -130,7 +138,28 @@ export default class Application {
           userInfo: userinfo,
         });
       } catch (err) {
-        console.error(err);
+        return res.redirect("/auth/login");
+      }
+    });
+    app.get("/dashboard/tools/labels", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
+        return res.render("./dashboard/tools/labels/index", {
+          name: process.env.PN,
+          userInfo: userinfo,
+        });
+      } catch (err) {
+        return res.redirect("/auth/login");
+      }
+    });
+    app.get("/dashboard/tools/labels/last-donate", async (req, res) => {
+      try {
+        const userinfo = await checkuser(req);
+        return res.render("./dashboard/tools/labels/last-donate", {
+          name: process.env.PN,
+          userInfo: userinfo,
+        });
+      } catch (err) {
         return res.redirect("/auth/login");
       }
     });
@@ -148,7 +177,6 @@ export default class Application {
         );
         return res.json({ success: true });
       } catch (err) {
-        console.error(err);
         return res.redirect("/auth/login");
       }
     });
@@ -157,40 +185,40 @@ export default class Application {
       const postinfo = req.body;
       try {
         const userinfo = await checkuser(req);
-          var randomletter = makeid(50);
-          connection.query(
-            `UPDATE users SET ${postinfo.type} = ?  WHERE ${postinfo.type} = ?`,
-            [randomletter, postinfo.link],
-            function (err) {
-              if (err) return res.json({ success: false });
-            }
-          );
-          return res.json({ success: true, randomletter: randomletter });
-        } catch (err) {
-          console.error(err);
-          return res.redirect("/auth/login");
-        }
+        var randomletter = makeid(50);
+        connection.query(
+          `UPDATE users SET ${postinfo.type} = ?  WHERE ${postinfo.type} = ?`,
+          [randomletter, postinfo.link],
+          function (err) {
+            if (err) return res.json({ success: false });
+          }
+        );
+        return res.json({ success: true, randomletter: randomletter });
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
 
     app.get("/dashboard/donates", async (req, res) => {
       try {
         const userinfo = await checkuser(req);
-          connection.query(
-            "SELECT * FROM donates WHERE streamer = ? ORDER BY id DESC;",
-            [userinfo.username],
-            function (err, res2s) {
-              return res.render("./dashboard/donates", {
-                name: process.env.PN,
-                userInfo: userinfo,
-                donates: res2s,
-                moment: moment,
-              });
-            }
-          );
-        } catch (err) {
-          console.error(err);
-          return res.redirect("/auth/login");
-        }
+        connection.query(
+          "SELECT * FROM donates WHERE streamer = ? ORDER BY id DESC;",
+          [userinfo.username],
+          function (err, res2s) {
+            return res.render("./dashboard/donates", {
+              name: process.env.PN,
+              userInfo: userinfo,
+              donates: res2s,
+              moment: moment,
+            });
+          }
+        );
+      } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+      }
     });
 
     app.get("/overlay/goal", (req, res) => {
@@ -199,7 +227,7 @@ export default class Application {
         "SELECT * FROM users WHERE goallink = ?",
         [goallink],
         function (err, ress) {
-          if (!ress[0]) return res.redirect("/");
+          if (!ress[0]) return res.send("expired");
           if (err) {
             console.error(err);
             return;
@@ -225,7 +253,7 @@ export default class Application {
         "SELECT * FROM users WHERE alertlink = ?",
         [alertlink],
         function (err, ress) {
-          if (!ress[0]) return res.redirect("/");
+          if (!ress[0]) return res.send("expired");
           if (err) {
             console.error(err);
             return;

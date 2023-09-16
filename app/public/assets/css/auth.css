@@ -34,3 +34,46 @@ body {
   border: 1px white solid;
   padding: 20px;
 }
+
+.sd-link {
+  background: var(--color-light);
+  border: medium none;
+  border-radius: 30px;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: normal;
+  height: auto;
+  margin: 3px 0;
+  padding: 14px 25px 13px;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  line-height: 1.5;
+  color: #495057;
+  direction: ltr;
+  text-align: left;
+}
+
+.remb {
+  display: inline-flex;
+  direction: rtl;
+}
+.remb label {
+  padding : 0 20px;
+}
+.buttonhayeauth button {
+  width: 100%;
+}
+.alert {
+  background-color: #ff46463a;
+  border: 1px #ff4646 solid;
+  border-radius: 30px;
+  text-align: center;
+  font-size: larger;
+}
+
+.fullname {
+  display: inline-flex;
+}

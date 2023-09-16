@@ -27,37 +27,60 @@
             style="width: 30%"
           />
         </div>
-        <form
-          class="row"
-          dir="ltr"
-          action="/donate/<%= streamer %>"
-          method="post"
-        >
-          <input
-            type="text"
-            name="donator"
-            id="donator"
-            class="col-12 mt-5 mb-3"
-            placeholder="Esm Shoma"
-            required
-          />
-          <input
-            type="text"
-            name="descs"
-            id="descs"
-            class="col-12 mb-3"
-            placeholder="Tozihat"
-            required
-          />
+        <form class="row" action="/donate/<%= streamer %>" method="post">
           <input
             type="number"
             name="money"
             id="money"
-            class="col-12 mb-3"
-            placeholder="Mablagh"
+            class="col-12 mt-2 mb-3 sd-link text-center"
+            placeholder="مبلغ حمایت"
             required
           />
-          <button type="submit" class="col-12 mt-3">DONE</button>
+          <input
+            type="text"
+            name="donator"
+            id="donator"
+            class="col-12 mb-3 sd-link text-center"
+            placeholder="نام شما"
+            required
+          />
+          <div class="col-6">
+            <input
+              type="email"
+              name="donator-email"
+              id="donator-email"
+              class="mb-3 sd-link text-center"
+              placeholder="ایمیل"
+              required
+            />
+          </div>
+          <div class="col-6">
+            <input
+              type="tel"
+              name="donator-phonenumber"
+              id="donator-phonenumber"
+              class="mb-3 sd-link text-center"
+              placeholder="شماره تماس"
+              required
+            />
+          </div>
+          <textarea
+            name="descs"
+            id="descs"
+            class="col-12 mb-3 sd-link"
+            placeholder="توضیحات"
+            style="
+              min-height: 100px !important;
+              resize: none;
+              direction: rtl;
+              text-align: right;
+            "
+            maxlength="300"
+            required
+          ></textarea>
+          <button type="submit" class="col-12 btn btn-primary mt-3">
+            پرداخت
+          </button>
         </form>
       </div>
     </div>
