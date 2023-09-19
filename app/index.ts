@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-const port = parseInt(process.env.PORT || 3000);
+const port = process.env.PORT || 3000;
 
 const app = express();
 import http from "http";
@@ -258,11 +258,36 @@ export default class Application {
             console.error(err);
             return;
           }
-          const alertconfig = ress[0];
           return res.render("overlays/alert", {
             name: process.env.PN,
             alertlink: alertlink,
           });
+        }
+      );
+    });
+
+    app.get("/overlay/last-donate", (req, res) => {
+      const lastdonolink = req.query.link;
+      connection.query(
+        "SELECT * FROM users WHERE lastdonolink = ?",
+        [lastdonolink],
+        function (err, ress) {
+          if (!ress[0]) return res.send("expired");
+          if (err) {
+            console.error(err);
+            return;
+          }
+          connection.query(
+            "SELECT * FROM donates WHERE streamer = ? ORDER BY id DESC;",
+            [ress[0].username],
+            function (err, respo) {
+              return res.render("overlays/last-donate", {
+                name: process.env.PN,
+                lastdonolink: lastdonolink,
+                respo: respo,
+              });
+            }
+          );
         }
       );
     });
@@ -331,6 +356,10 @@ export default class Application {
             }' WHERE username = '${streamer}'`
           );
           io.sockets.emit("goal-" + ress[0].goallink, money);
+          io.sockets.emit(
+            "lastdono-" + ress[0].lastdonolink,
+            `${req.body.donator} - ${money} تومان`
+          );
           io.sockets.emit("alert-" + ress[0].alertlink, {
             donator: req.body.donator,
             desc: req.body.descs,

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= name %> / last Donate</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif !important;
+        height: 100%;
+      }
+      .ldonoBase {
+        transform: translateX(-50%) translateY(-50%);
+        bottom: unset;
+        white-space: nowrap;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        height: 27px;
+        left: 50%;
+        line-height: 27px;
+        padding: 0 5px;
+        position: absolute;
+        right: unset;
+        text-align: center;
+        text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.6);
+        top: 50%;
+        vertical-align: top;
+        padding: 0px;
+        color: #fff;
+        font-family: Montserrat, sans-serif;
+      }
+    </style>
+  </head>
+  <body onresize="Resize()">
+    <div class="ldonoBase" id="ldonoBase">هیچ کس تا الان</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script>
+      function Resize() {
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var scaleValue = Math.min(
+          screenWidth / (document.getElementById("ldonoBase").clientWidth + 50),
+          screenHeight / document.getElementById("ldonoBase").clientHeight
+        );
+        var transformValue =
+          "translateX(-50%) translateY(-50%) scale(" + scaleValue + ")";
+        document.getElementById("ldonoBase").style.transform = transformValue;
+      }
+      var socket = io();
+      socket.on("connect", function () {});
+      socket.on("lastdono-<%= lastdonolink %>", changeLastDonate);
+      function changeLastDonate(e) {
+        $("#ldonoBase").text(e);
+        Resize();
+      }
+      (function setup() {
+       const lastdonate = "<%= respo[0].donator %> - <%= respo[0].price %> تومان"
+        $("#ldonoBase").text(lastdonate);
+      Resize();
+      })();
+
+    </script>
+  </body>
+</html>

@@ -19,4 +19,4 @@ connection.connect((err) => {
   }
 });
 
-module.exports = connection;
+export default connection;

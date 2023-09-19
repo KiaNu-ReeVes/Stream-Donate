@@ -237,6 +237,18 @@ main .head {
   right: 0;
   margin: auto;
 }
+
+.main-alert .main-head {
+  font-size: large;
+  padding: 5px;
+  font-weight: bolder;
+}
+
+.main-alert .main-linktitle {
+  font-size: small;
+  padding: 10px;
+}
+
 .main-alert .link {
   background: var(--color-light);
   border: medium none;

@@ -58,6 +58,8 @@
           <main class="container-fluid">
             <div class="head">هشدار رویداد جدید</div>
             <div class="main-alert">
+              <div class="main-head mt-5">ابزار آخرین حمایت</div>
+              <div class="main-linktitle">لینک ابزار:</div>
               <input
                 type="url"
                 disabled
@@ -68,8 +70,8 @@
                 onkeypress="return false;"
                 name="link"
                 id="link"
-                class="link mt-5"
-                value="http://localhost:3000/overlay/alert?link=<%= userInfo.alertlink %>"
+                class="link"
+                value="http://localhost:3000/overlay/last-donate?link=<%= userInfo.lastdonolink %>"
               />
               <div class="text-center mt-4">
                 <button
@@ -97,32 +99,6 @@
                   باطل کردن و تغییر لینک این ابزار
                 </button>
               </div>
-              <div class="text-center mt-5">
-                <h3 class="text-end">نمایش هشدار حمایت جدید نمونه</h3>
-                <form id="showtestdoantion" class="form-group row text-center">
-                  <div class="col-12 col-xl-10 text-end">
-                    <label for="toollink">مبلغ حمایت نمونه:</label>
-                    <input
-                      type="number"
-                      class="form-control link text-end"
-                      id="testamount"
-                      name="testamount"
-                      max="999999999"
-                      min="100"
-                      value="1000"
-                    />
-                  </div>
-                  <div class="col-12 col-xl-2 mt-4">
-                    <button
-                      style="float: unset; white-space: nowrap"
-                      type="submit"
-                      class="btn btn-primary"
-                    >
-                      نمایش هشدار
-                    </button>
-                  </div>
-                </form>
-              </div>
             </div>
           </main>
         </div>
@@ -137,7 +113,7 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/script.js"></script>
     <script>
-      var alertlink = "<%= userInfo.alertlink %>"
+      var lastdonolink = "<%= userInfo.lastdonolink %>"
       document.getElementById("themebtn").addEventListener("click", () => {
         if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
           document.documentElement.setAttribute("data-bs-theme", "light");
@@ -155,11 +131,11 @@
         });
         $("#revoke").on("click", () => {
           $.post("/dashboard/tools/revokeurl", {
-            type: "alertlink",
-            link: alertlink
+            type: "lastdonolink",
+            link: lastdonolink
           }).done((response) => {
             if (response.success == true) {
-              alertlink = response.randomletter
+              lastdonolink = response.randomletter
               $("#link").val("http://localhost:3000/overlay/alert?link=" + response.randomletter)
             }
           })

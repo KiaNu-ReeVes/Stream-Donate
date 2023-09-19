@@ -1,4 +1,4 @@
-const express = require("express");
+import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import jwt from "jsonwebtoken";
 import connection from "./mysql";
@@ -18,17 +18,17 @@ function makeid(length) {
   return result;
 }
 
-router.get("/", (req, res) => {
+router.get("/", (req: Request, res: Response) => {
   return res.redirect("/auth/login");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", (req: Request, res: Response) => {
   return res.render("./auth/login", {
     name: process.env.PN,
   });
 });
 
-router.get("/register", function (req, res) {
+router.get("/register", function (req: Request, res: Response) {
   const userinfo = req.cookies.newacc;
   if (!userinfo) return res.redirect("/auth/login")
   return res.render("./auth/register", {
@@ -36,7 +36,7 @@ router.get("/register", function (req, res) {
   });
 })
 
-router.post("/login", function (req, res) {
+router.post("/login", function (req: Request, res: Response) {
   connection.query(
     "SELECT * FROM users WHERE email = ?;",
     [req.body.infoPost.email],
@@ -52,7 +52,7 @@ router.post("/login", function (req, res) {
           httpOnly: true,
         });
         return res.json({
-          newacc: true,
+          newacc: true, 
           success: false,
           message: "اکانتی با این ایمیل وجود ندارد !",
         });
@@ -98,7 +98,7 @@ router.post("/login", function (req, res) {
   );
 });
 
-router.post("/register", function (req, res) {
+router.post("/register", function (req: Request, res: Response) {
   if (!req.cookies.newacc) {
     return res.json({
       success: false,
@@ -133,7 +133,7 @@ router.post("/register", function (req, res) {
                     } else {
                       // اگر هیچ خطایی رخ نداده باشد، ادامه کد را اجرا کنید و پاسخ موفقیت‌آمیز را ارسال کنید
                       connection.query(
-                        "INSERT INTO users (username, email, password, firstname, lastname, phone_number, link, alertlink, goallink) VALUES (?,?,?,?,?,?,?,?,?);",
+                        "INSERT INTO users (username, email, password, firstname, lastname, phone_number, link, alertlink, goallink, lastdonolink) VALUES (?,?,?,?,?,?,?,?,?,?);",
                         [
                           req.body.infoPost.username,
                           req.cookies.newacc.userinfo.email,
@@ -142,6 +142,7 @@ router.post("/register", function (req, res) {
                           req.body.infoPost.lastname,
                           req.body.infoPost.phonenumber,
                           req.body.infoPost.link,
+                          makeid(50),
                           makeid(50),
                           makeid(50),
                         ],
