@@ -58,6 +58,10 @@ export default class Application {
       return result;
     }
 
+    app.get("/", (req, res) => {
+      return res.render("./index");
+    });
+
     app.use("/auth", require("./router/auth"));
 
     function checkuser(req) {
@@ -368,6 +372,16 @@ export default class Application {
           return res.send("<h1>Done</h1>");
         }
       );
+    });
+
+    app.get("/auth/logout", (req, res) => {
+      res.cookie("token", "", { expires: new Date(1), path: "/" });
+      res.clearCookie("token", { path: "/" });
+
+      return res.redirect("/");
+    });
+    app.use(function (req, res) {
+      res.status(404).render("404");
     });
 
     server.listen(port, () => {

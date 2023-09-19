@@ -57,7 +57,10 @@
           </header>
           <main class="container-fluid">
             <div class="head">حمایت‌ها</div>
-            <div class="row" style="padding: 0 10px">
+            <div
+              class="row"
+              style="padding: 0 10px; overflow-y: auto; max-height: 80%"
+            >
               <table class="table table-striped">
                 <thead>
                   <tr>
@@ -69,15 +72,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <% for (let i = 0; i < donates.length; i++) { %>
-                        <tr>
-                          <th scope="row"><%= donates[i].id %></th>
-                          <td><%= moment(donates[i].date).format('D, MM, YYYY'); %></td>
-                          <td><%= donates[i].donator %></td>
-                          <td><%= donates[i].price %></td>
-                          <td><%= donates[i].descs %></td>
-                        </tr>
-                    <% } %>
+                  <% for (let i = 0; i < donates.length; i++) { %>
+                  <tr>
+                    <th scope="row"><%= donates[i].id %></th>
+                    <td>
+                      <%= moment(donates[i].date).format('D, MM, YYYY'); %>
+                    </td>
+                    <td><%= donates[i].donator %></td>
+                    <td><%= donates[i].price %></td>
+                    <td><%= donates[i].descs %></td>
+                  </tr>
+                  <% } %>
                 </tbody>
               </table>
             </div>

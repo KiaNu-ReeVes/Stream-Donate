@@ -15,19 +15,16 @@
     ></script>
     <link rel="stylesheet" href="/assets/css/theme.css" />
     <link rel="stylesheet" href="/assets/css/auth.css" />
-    <title><%= name %> | Donate <%= streamer.username %></title>
+    <title><%= name %> | Donate <%= streamer %></title>
   </head>
   <body dir="rtl">
-    <div class="base">
+    <div class="base" style="max-height: 520px">
       <div class="container-fluid">
-        <div class="logo text-center">
-          <img
-            src="/assets/img/untitled-1_iyfa.png"
-            alt="logo"
-            style="width: 30%"
-          />
+        <div class="donate-image">
+          <img src="/assets/img/user.webp" alt="logo" />
+          <div><%= streamer %></div>
         </div>
-        <form class="row" action="/donate/<%= streamer %>" method="post">
+        <form class="row mt-4" action="/donate/<%= streamer %>" method="post">
           <input
             type="number"
             name="money"
